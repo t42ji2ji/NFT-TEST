@@ -20,12 +20,14 @@
     .text 
       input(@change="onImageChange" type="file")
     .button.text(@click="saveCanvas") 儲存
+    .button.text(@click="connectMetaMask") connectWallet 
     .button.text(@click="doMint") mint 
 </template>
 
 <script setup lang="ts">
 import { useMetaMask } from './composable/web3';
 import { fileImage, address, useP5, inputText, textAlign, bgColor, textColor, canvasRef, googleImageJson } from './composable/p5Tools';
+import { ethers } from 'ethers';
 const { wrapMode, saveCanvas } = useP5();
 const { mintNft, connectMetaMask } = useMetaMask();
 const onImageChange = (event: Event) => {
@@ -41,6 +43,10 @@ const onImageChange = (event: Event) => {
 }
 const doMint = () => {
   mintNft(address.value, { image: googleImageJson?.value['download_url'] ?? '' })
+}
+
+const test = async () => {
+  const provider = new ethers.providers.Web3Provider(window.ethereum)
 }
 </script>
 
