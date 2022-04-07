@@ -1,6 +1,6 @@
 import { onMounted, ref, watch } from 'vue';
 import P5 from 'p5';
-import { Cloudinary } from "cloudinary-core";    // If your code is for ES6 or higher
+
 
 export const wrapMode = ref(false);
 export const inputText = ref('')
@@ -12,6 +12,7 @@ export const fileImage = ref()
 export const googleImageJson = ref()
 export const address = ref('')
 export const imgUrl = ref('')
+export const showImgLoading = ref(false)
 
 let p5 = ref();
 let json;
@@ -46,6 +47,7 @@ const saveCanvas = () => {
   if (!p5.value) {
     return
   }
+  showImgLoading.value = true
   let canvas = canvasRef.value?.firstChild as HTMLCanvasElement
   console.log(canvas.toDataURL())
   // p5.value.saveCanvas('myCanvas', 'jpg');
@@ -69,6 +71,7 @@ const saveCanvas = () => {
       method: 'put'
     })
     imgUrl.value = json[0]['download_url']
+    showImgLoading.value = false
   }, 'image/jpeg');
 
 }

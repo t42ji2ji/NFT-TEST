@@ -20,8 +20,10 @@
         input(v-model="textColor" type="color")
       .text 
         input(@change="onImageChange" type="file")
-      .text {{ imgUrl }}
-      .button.text(@click="saveCanvas") 儲存
+      .button.flex.items-center(@click="saveCanvas")
+        .text 儲存
+        .loader(v-if="showImgLoading")
+      .text {{ imgUrl == '' ? '' : 'OK' }}
       .button.text(@click="connectMetaMask") connectWallet 
       .button.text(@click="doMint") mint 
   .flex.flex-col.items-center
@@ -32,24 +34,61 @@
       .text.flex.items-start 
         input.inputText(v-model="toAddress"  placeholder="to")
       .text.flex.items-start 
-        input.inputText(v-model="tokenId"  placeholder="to")
+        input.inputText(v-model="tokenId"  placeholder="tokenId")
       .button.text(@click="transferNFT(fromAddress, toAddress, tokenId)") 轉移NFT
+    .text -------------------------------------
+    .flex.items-center
+      .text.flex.items-start 
+        input.inputText(v-model="fromAddress" placeholder="address")
+      .button.text(@click="checkBalance") 查詢個數
+      .text.ml-4  {{ balance }} 個
+    .text -------------------------------------
+    .flex.items-center
+      .text.flex.items-start 
+        input.inputText(v-model="fromAddress" placeholder="address")
+      .text.flex.items-start 
+        input.inputText(v-model="tokenList" placeholder="address")
+      .button.text(@click="doCheckOwnerOfTokenList") 查詢擁有的tokens
+      .text.ml-4  {{ matchOwnerTokenList ? '符合條件' : '條件不符' }} 
 </template>
 
 <script setup lang="ts">
 import { useMetaMask } from './composable/web3';
 import {
   imgUrl, fileImage, address, useP5, inputText, textAlign, bgColor,
-  textColor, canvasRef, googleImageJson
+  textColor, canvasRef, googleImageJson, showImgLoading
 } from './composable/p5Tools';
 import { ethers } from 'ethers';
 import { ref } from 'vue';
 const { wrapMode, saveCanvas } = useP5();
-const { mintNft, connectMetaMask, transferNFT } = useMetaMask();
+const { mintNft, connectMetaMask, transferNFT, balanceOf, checkOwnerOfTokenList } = useMetaMask();
 
 const toAddress = ref('')
 const fromAddress = ref('')
 const tokenId = ref()
+
+const tokenList = ref('')
+const balance = ref()
+const matchOwnerTokenList = ref(false)
+
+
+const doCheckOwnerOfTokenList = async () => {
+  matchOwnerTokenList.value = false
+  const all = tokenList.value.split(',').map((s) => ethers.BigNumber.from(s))
+  if (all.length == 0) {
+    console.log('cant check')
+    return
+  }
+  console.log(' check')
+
+  const res = await checkOwnerOfTokenList(fromAddress.value, all)
+  matchOwnerTokenList.value = res
+}
+
+const checkBalance = async () => {
+  balance.value = await balanceOf(fromAddress.value)
+}
+
 
 const onImageChange = (event: Event) => {
   if (event) {
@@ -95,7 +134,7 @@ html {
 
 .button {
   border-radius: 5px;
-  background-color: #3488dd;
+  background-color: #3e78c0;
   padding: 5px 10px;
   color: white;
 }
@@ -110,5 +149,23 @@ html {
 .p5 {
   border-radius: 5px;
   overflow: hidden;
+}
+
+.loader {
+  border: 2px solid #f3f3f3; /* Light grey */
+  border-top: 2px solid #939393; /* Blue */
+  border-radius: 50%;
+  width: 15px;
+  height: 15px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
