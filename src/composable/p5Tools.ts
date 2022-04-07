@@ -11,6 +11,7 @@ export const canvasRef = ref<HTMLElement>()
 export const fileImage = ref()
 export const googleImageJson = ref()
 export const address = ref('')
+export const imgUrl = ref('')
 
 let p5 = ref();
 let json;
@@ -69,6 +70,7 @@ const saveCanvas = () => {
       },
       method: 'put'
     })
+    imgUrl.value = json[0]['download_url']
     console.log(res2)
   }, 'image/jpeg');
 

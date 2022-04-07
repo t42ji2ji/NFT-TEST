@@ -19,6 +19,7 @@
       input(v-model="textColor" type="color")
     .text 
       input(@change="onImageChange" type="file")
+    .text {{ imgUrl }}
     .button.text(@click="saveCanvas") 儲存
     .button.text(@click="connectMetaMask") connectWallet 
     .button.text(@click="doMint") mint 
@@ -26,7 +27,10 @@
 
 <script setup lang="ts">
 import { useMetaMask } from './composable/web3';
-import { fileImage, address, useP5, inputText, textAlign, bgColor, textColor, canvasRef, googleImageJson } from './composable/p5Tools';
+import {
+  imgUrl, fileImage, address, useP5, inputText, textAlign, bgColor,
+  textColor, canvasRef, googleImageJson
+} from './composable/p5Tools';
 import { ethers } from 'ethers';
 const { wrapMode, saveCanvas } = useP5();
 const { mintNft, connectMetaMask } = useMetaMask();
