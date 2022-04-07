@@ -21,7 +21,7 @@
       .text 
         input(@change="onImageChange" type="file")
       .button.flex.items-center(@click="saveCanvas")
-        .text 儲存
+        .text 上傳圖片
         .loader(v-if="showImgLoading")
       .text {{ imgUrl == '' ? '' : 'OK' }}
       .button.text(@click="connectMetaMask") connectWallet 
@@ -47,7 +47,7 @@
       .text.flex.items-start 
         input.inputText(v-model="fromAddress" placeholder="address")
       .text.flex.items-start 
-        input.inputText(v-model="tokenList" placeholder="address")
+        input.inputText(v-model="tokenList" placeholder="tokenIds")
       .button.text(@click="doCheckOwnerOfTokenList") 查詢擁有的tokens
       .text.ml-4  {{ matchOwnerTokenList ? '符合條件' : '條件不符' }} 
 </template>
@@ -60,6 +60,9 @@ import {
 } from './composable/p5Tools';
 import { ethers } from 'ethers';
 import { ref } from 'vue';
+import { useToast } from "vue-toastification";
+
+
 const { wrapMode, saveCanvas } = useP5();
 const { mintNft, connectMetaMask, transferNFT, balanceOf, checkOwnerOfTokenList } = useMetaMask();
 
@@ -70,6 +73,9 @@ const tokenId = ref()
 const tokenList = ref('')
 const balance = ref()
 const matchOwnerTokenList = ref(false)
+
+const toast = useToast();
+
 
 
 const doCheckOwnerOfTokenList = async () => {
@@ -101,7 +107,22 @@ const onImageChange = (event: Event) => {
 
 }
 const doMint = () => {
-  mintNft(address.value, { image: googleImageJson?.value['download_url'] ?? '' })
+  console.log(address.value)
+  if (address.value == '') {
+    toast('地址未填寫')
+    return
+  }
+  if (!ethers.utils.isAddress(address.value)) {
+    toast('地址錯誤')
+    return
+  }
+  let imgUrl = (googleImageJson?.value ?? '')['download_url']
+  if (!imgUrl) {
+    toast('圖片未上傳')
+    return
+  }
+
+  mintNft(address.value, { image: imgUrl })
 }
 
 const test = async () => {

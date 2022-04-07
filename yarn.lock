@@ -2250,6 +2250,11 @@
     "vscode-pug-languageservice" "0.29.8"
     "vscode-typescript-languageservice" "0.29.8"
 
+"vue-toastification@^2.0.0-rc.5":
+  "integrity" "sha512-q73e5jy6gucEO/U+P48hqX+/qyXDozAGmaGgLFm5tXX4wJBcVsnGp4e/iJqlm9xzHETYOilUuwOUje2Qg1JdwA=="
+  "resolved" "https://registry.npmjs.org/vue-toastification/-/vue-toastification-2.0.0-rc.5.tgz"
+  "version" "2.0.0-rc.5"
+
 "vue-tsc@^0.29.8":
   "integrity" "sha512-pT0wLRjvRuSmB+J4WJT6uuV9mO0KtSSXEAtaVXZQzyk5+DJdbLIQTbRce/TXSkfqt1l1WogO78RjtOJFiMCgfQ=="
   "resolved" "https://registry.npmjs.org/vue-tsc/-/vue-tsc-0.29.8.tgz"
@@ -2258,7 +2263,7 @@
     "@volar/shared" "0.29.8"
     "vscode-vue-languageservice" "0.29.8"
 
-"vue@^3.2.25", "vue@3.2.31":
+"vue@^3.0.2", "vue@^3.2.25", "vue@3.2.31":
   "integrity" "sha512-odT3W2tcffTiQCy57nOT93INw1auq5lYLLYtWpPYQQYQOOdHiqFct9Xhna6GJ+pJQaF67yZABraH47oywkJgFw=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-3.2.31.tgz"
   "version" "3.2.31"
