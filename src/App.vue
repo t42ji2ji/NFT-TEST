@@ -11,9 +11,6 @@
       .text 對齊
         input(v-model="textAlign" type="range" id="volume" name="volume"
           min="0" max="2")
-      .text address
-        input.inputText(v-model="address"  id="volume" name="volume"
-          min="0" max="2")
       .text 背景顏色 {{ bgColor }}
         input(v-model="bgColor" type="color")
       .text 文字顏色 {{ textColor }}
@@ -25,6 +22,9 @@
         .loader(v-if="showImgLoading")
       .text {{ imgUrl == '' ? '' : 'OK' }}
       .button.text(@click="connectMetaMask") connectWallet 
+      .text address
+        input.inputText(v-model="address"  id="volume" name="volume"
+          min="0" max="2")
       .button.text(@click="doMint") mint 
   .flex.flex-col.items-center
     .text -------------------------------------
