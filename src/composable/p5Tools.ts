@@ -51,7 +51,6 @@ const saveCanvas = () => {
   // p5.value.saveCanvas('myCanvas', 'jpg');
   canvas.toBlob(async (blob) => {
     let file = new File([blob!], "fileName.jpg", { type: "image/jpeg" })
-    console.log(file)
     const res = await fetch("https://dev-nft-marketplace-tqbqpbqb5a-uk.a.run.app/api/v1/files/generate_upload_url", {
       body: JSON.stringify({
         category: "user_profile_image",
@@ -62,7 +61,6 @@ const saveCanvas = () => {
     })
     json = await res.json();
     googleImageJson.value = json[0]
-    console.log(json[0])
     const res2 = await fetch(json[0]['upload_url'], {
       body: file,
       headers: {
@@ -71,7 +69,6 @@ const saveCanvas = () => {
       method: 'put'
     })
     imgUrl.value = json[0]['download_url']
-    console.log(res2)
   }, 'image/jpeg');
 
 }

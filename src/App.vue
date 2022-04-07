@@ -1,28 +1,39 @@
 <template lang="pug">
-.flex.justify-center.w-full.flex-row.items-start
-  .p5#p5Canvas(ref="canvasRef")
-  .w-4
-  .flex.flex-col.items-start
-    .text(@click="wrapMode = !wrapMode") TextWrap
-      input(type="checkbox" v-model="wrapMode")
-    .text.flex.items-start 文字
-      textarea.inputText(v-model="inputText" type="textarea" )
-    .text 對齊
-      input(v-model="textAlign" type="range" id="volume" name="volume"
-        min="0" max="2")
-    .text address
-      input.inputText(v-model="address"  id="volume" name="volume"
-        min="0" max="2")
-    .text 背景顏色 {{ bgColor }}
-      input(v-model="bgColor" type="color")
-    .text 文字顏色 {{ textColor }}
-      input(v-model="textColor" type="color")
-    .text 
-      input(@change="onImageChange" type="file")
-    .text {{ imgUrl }}
-    .button.text(@click="saveCanvas") 儲存
-    .button.text(@click="connectMetaMask") connectWallet 
-    .button.text(@click="doMint") mint 
+.flex.flex-col
+  .flex.justify-center.w-full.flex-row.items-start
+    .p5#p5Canvas(ref="canvasRef")
+    .w-4
+    .flex.flex-col.items-start
+      .text(@click="wrapMode = !wrapMode") TextWrap
+        input(type="checkbox" v-model="wrapMode")
+      .text.flex.items-start 文字
+        textarea.inputText(v-model="inputText" type="textarea" )
+      .text 對齊
+        input(v-model="textAlign" type="range" id="volume" name="volume"
+          min="0" max="2")
+      .text address
+        input.inputText(v-model="address"  id="volume" name="volume"
+          min="0" max="2")
+      .text 背景顏色 {{ bgColor }}
+        input(v-model="bgColor" type="color")
+      .text 文字顏色 {{ textColor }}
+        input(v-model="textColor" type="color")
+      .text 
+        input(@change="onImageChange" type="file")
+      .text {{ imgUrl }}
+      .button.text(@click="saveCanvas") 儲存
+      .button.text(@click="connectMetaMask") connectWallet 
+      .button.text(@click="doMint") mint 
+  .flex.flex-col.items-center
+    .text -------------------------------------
+    .flex
+      .text.flex.items-start 
+        input.inputText(v-model="fromAddress" placeholder="from" )
+      .text.flex.items-start 
+        input.inputText(v-model="toAddress"  placeholder="to")
+      .text.flex.items-start 
+        input.inputText(v-model="tokenId"  placeholder="to")
+      .button.text(@click="transferNFT(fromAddress, toAddress, tokenId)") 轉移NFT
 </template>
 
 <script setup lang="ts">
@@ -32,13 +43,18 @@ import {
   textColor, canvasRef, googleImageJson
 } from './composable/p5Tools';
 import { ethers } from 'ethers';
+import { ref } from 'vue';
 const { wrapMode, saveCanvas } = useP5();
-const { mintNft, connectMetaMask } = useMetaMask();
+const { mintNft, connectMetaMask, transferNFT } = useMetaMask();
+
+const toAddress = ref('')
+const fromAddress = ref('')
+const tokenId = ref()
+
 const onImageChange = (event: Event) => {
   if (event) {
     let file = (event.target as HTMLInputElement)?.files;
     if (file) {
-      console.log(file[0] ?? '')
       let urlOfImageFile = URL.createObjectURL(file[0]);
       fileImage.value = urlOfImageFile
     }
@@ -87,6 +103,8 @@ html {
 .inputText {
   background-color: rgb(211, 211, 211);
   border-radius: 5px;
+  padding: 5px;
+  margin: 3px;
 }
 
 .p5 {

@@ -11,6 +11,25 @@ export const useMetaMask = () => {
     const address = await signer.getAddress()
     console.log('address = ', address);
   }
+
+
+  const transferNFT = async (from: string, to: string, tokenId: number) => {
+
+    if (!ethers.Signer) {
+      connectMetaMask()
+    }
+
+    const nftAddress = '0x00c74fa26a5d1de302e08a6ea928551fd547c7ed'
+    const nftContract = new ethers.Contract(nftAddress, abi.abi, provider);
+    console.log('contract name', await nftContract.name())
+
+    const nftWithSigner = nftContract.connect(provider.getSigner())
+
+    const signer = provider.getSigner()
+    const toAddress = await signer.getAddress()
+
+    await nftWithSigner.transferFrom(from, to ?? toAddress, tokenId)
+  }
   const mintNft = async (address: string, metaData: {}) => {
 
     if (!ethers.Signer) {
@@ -47,6 +66,7 @@ export const useMetaMask = () => {
   }
   return {
     mintNft,
+    transferNFT,
     connectMetaMask
   }
 }
