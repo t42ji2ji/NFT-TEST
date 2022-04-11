@@ -20,7 +20,7 @@ export const useMetaMask = () => {
     const nftContract = new ethers.Contract(nftAddress, abi.abi, provider);
     const nftWithSigner = nftContract.connect(provider.getSigner())
     const res = await nftWithSigner.checkOwnerOfTokenList(from, tokens)
-    console.log(' check', res)
+    console.log('check', res)
     return res
   }
   const balanceOf = async (from: string) => {
@@ -32,8 +32,6 @@ export const useMetaMask = () => {
     console.log('contract name', await nftContract.name())
 
     const nftWithSigner = nftContract.connect(provider.getSigner())
-
-    const signer = provider.getSigner()
     const res = await nftWithSigner.balanceOf(from)
     console.log('balanceOf', parseInt(res))
     return parseInt(res)
