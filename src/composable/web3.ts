@@ -82,7 +82,7 @@ export const useMetaMask = () => {
       },
       method: 'put'
     })
-    console.log(metaData)
+    console.log(metaData, address)
     await nftWithSigner.safeMint(address ?? toAddress, json[0]['download_url'])
   }
   return {
